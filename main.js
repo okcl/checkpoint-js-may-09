@@ -20,8 +20,8 @@ function getRandomNumber(min, max) {
 }
 
 class Person {
-    constructor(_name){
-        _name = this.name;
+    constructor(name){
+        this._name = name;
     }
 
     get name(){
@@ -34,10 +34,10 @@ class Person {
 }
 
 class Student extends Person{
-    constructor(_name, _year, _grade){
-        super(_name);
-        _year=this.year;
-        _grade=this.grade;
+    constructor(name, year, grade){
+        super(name);
+        this._year = year;
+        this._grade = 0;
     }
 
     
@@ -55,11 +55,10 @@ class Student extends Person{
     }
 
     set grade(arg3){
-        this._grade = 0;
-        arg3 = this._grade;
+        this._grade = arg3;
     }
 }
-const students = people.map(person => new Student(Person.name,Student.year))
+const students = people.map(person => new Student(person.name, person.year))
 
 class Academy{
     static exam(students){
@@ -88,5 +87,36 @@ class Academy{
             }
         })
     }
+
+    static studentInfo(students) {
+        return students.map(student => `${student.name}, of year ${student.year}, has a grade of ${student.grade}`);
+    }
+
+    static printStudents(students, callbackFc) {
+        students.forEach(student => callbackFc(student.name));
+    }
+
+    static averageGrade(students) {
+        return new Promise((resolve, reject) => {
+            if (students.length < 3) {
+                reject("Too few students!");
+            } else {
+                useTimeout(() => {
+                    const sum = students.reduce((acc, curr) => acc + curr.grade, 0);
+                    const average = sum / students.length;
+                    resolve(average);
+                }, 2000);
+            }
+        });
+    }
 }
 
+function callbackFunction1(name) {
+    console.log(name);
+}
+
+const studentsJSON = JSON.stringify(students);
+console.log(studentsJSON);
+
+const studentsParsed = JSON.parse(studentsJSON);
+console.log(studentsParsed);
